@@ -2,7 +2,7 @@ import { FormEvent, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import "./modal.scss";
 
-import { sanitiseInput } from "../utils/sanitise";
+import { sanitiseInput } from "../../utils/sanitise";
 
 type ModalProps = {
   onClose: () => void;

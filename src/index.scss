@@ -38,13 +38,21 @@ body {
 }
 
 h1,
-h2 {
+h2,
+p {
+  // overflow-wrap: break-word; // Doesn't work with grid cells
+  word-break: break-all;
   margin: 0;
 }
 
-p {
-  margin-top: 0;
-}
+// h1,
+// h2 {
+//   margin: 0;
+// }
+
+// p {
+//   margin-top: 0;
+// }
 
 button {
   cursor: pointer;

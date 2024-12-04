@@ -3,6 +3,10 @@
   border: 1px solid #e6e6e6;
   border-radius: 5px;
   padding: 20px;
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  // grid-gap: 20px;
 
   &__actions {
     display: flex;
