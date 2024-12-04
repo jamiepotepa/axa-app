@@ -7,13 +7,13 @@ import Modal from "./components/Modal";
 import LoadingSpinner from "./components/LoadingSpinner";
 
 //TODO
-// Need error handling if a fetch fails. !ok
+// Need error handling if a fetch fails. Some sort of message. !ok
 // Move fetches to hooks?
-// Separate components and styles
 // Add edit note functionality
 // Add search functionality - use Debounce
 // Cancel button in the modal needs to clear the form and close the modal
 // update Readme to explain hos to run the app and give some explanation of the code
+//* Separate components and styles
 
 // interface NoteData {
 //   id: string;
