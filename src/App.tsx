@@ -1,8 +1,10 @@
-// import { useState } from "react";
-// import "./App.css";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import BounceLoader from "react-spinners/BounceLoader";
+
+import { NoteData } from "./types";
+import Note from "./components/Note";
+import Modal from "./components/Modal";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 //TODO
 // Need error handling if a fetch fails. !ok
@@ -10,11 +12,14 @@ import BounceLoader from "react-spinners/BounceLoader";
 // Separate components and styles
 // Add edit note functionality
 // Add search functionality - use Debounce
-interface NoteData {
-  id: string;
-  title: string;
-  content: string;
-}
+// Cancel button in the modal needs to clear the form and close the modal
+// update Readme to explain hos to run the app and give some explanation of the code
+
+// interface NoteData {
+//   id: string;
+//   title: string;
+//   content: string;
+// }
 
 function App() {
   const [showModal, setShowModal] = useState(false);
@@ -148,13 +153,13 @@ function App() {
           <div>
             <p>
               Looks like you don't have any notes! Add a note by clicking the
-              add note button in the top right
+              add note button up there in the top right
             </p>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
           </div>
         ) : (
           <div className="notes-container">
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
             {notes.map(({ id, title, content }) => (
               // <Note key={note.id} title={note.title} content={note.content} />
               <Note
@@ -176,138 +181,3 @@ function App() {
 }
 
 export default App;
-
-type NoteProps = {
-  deleteNote: (id: string) => void;
-  id: string;
-  title: string;
-  content: string;
-};
-
-function Note({ id, title, content, deleteNote }: NoteProps) {
-  return (
-    <div className="note">
-      <div className="note__header">
-        <h2>{title}</h2>
-      </div>
-      <div className="node__content">
-        <p>{content}</p>
-      </div>
-      <div className="note__actions">
-        <button className="note__button note__button--edit">Edit</button>
-        <button
-          className="note__button note__button--delete"
-          onClick={() => deleteNote(id)}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  );
-}
-
-type ModalProps = {
-  onClose: () => void;
-  addNote: (data: { title: string; content: string }) => void;
-  // onSave: () => void;
-};
-
-function Modal({ onClose, addNote }: ModalProps) {
-  // // ! DO I NEED THIS OR CAN I JUST INLINE IT?
-  // const handleContentClick = (e: MouseEvent<HTMLDivElement>) => {
-  //   e.stopPropagation();
-  // };
-
-  const [error, setError] = useState(false);
-
-  const titleRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    console.log("handleSubmit");
-    e.preventDefault();
-
-    // Fallback if required is removed from the input fields
-    if (!titleRef.current?.value || !contentRef.current?.value) {
-      setError(true);
-      return;
-    }
-
-    setError(false);
-
-    const data = {
-      title: sanitiseInput(titleRef.current!.value),
-      content: sanitiseInput(contentRef.current!.value),
-    };
-
-    addNote(data);
-    console.log(data);
-
-    // OR SHALL I JUST CLOSE THE FOdRM ?
-    // (e.target as HTMLFormElement).reset();
-
-    onClose();
-  };
-
-  return (
-    <div className="modal">
-      <div className="modal__overlay" onClick={onClose}></div>
-      <div className="modal__content">
-        <button className="modal__close" onClick={onClose}>
-          <RxCross1 />
-        </button>
-        <div className="modal__header">
-          <h2>Add a new note</h2>
-        </div>
-        <div className="modal__body">
-          <form onSubmit={handleSubmit}>
-            <div className="modal__input-container">
-              <input
-                required
-                type="text"
-                placeholder="Title ..."
-                className="modal__input"
-                ref={titleRef}
-              />
-              <textarea
-                required
-                rows={4}
-                placeholder="Note content ..."
-                className="modal__text-area"
-                ref={contentRef}
-              ></textarea>
-            </div>
-            {error && (
-              <div className="modal__error-container">
-                <p className="modal__error">Please fill in all fields</p>
-              </div>
-            )}
-            <div className="modal__button-container">
-              <button className="modal__button modal__button--cancel">
-                Cancel
-              </button>
-              <button className="modal__button" type="submit">
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Loading() {
-  return (
-    <div className="loading">
-      <BounceLoader />
-    </div>
-  );
-}
-
-// Helper function for a basic sanitisation of input
-function sanitiseInput(input: string): string {
-  const tempDiv = document.createElement("div");
-  tempDiv.textContent = input;
-  return tempDiv.innerHTML.trim();
-}
