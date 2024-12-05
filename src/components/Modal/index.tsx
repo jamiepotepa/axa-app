@@ -25,7 +25,7 @@ function Modal({ onClose, addNote }: ModalProps) {
     console.log("handleSubmit");
     e.preventDefault();
 
-    // Fallback if required is removed from the input fields
+    // Fallback if 'required' is removed from the input fields
     if (!titleRef.current?.value || !contentRef.current?.value) {
       setError(true);
       return;
@@ -40,9 +40,6 @@ function Modal({ onClose, addNote }: ModalProps) {
 
     addNote(data);
     console.log(data);
-
-    // OR SHALL I JUST CLOSE THE FOdRM ?
-    // (e.target as HTMLFormElement).reset();
 
     onClose();
   };
@@ -81,11 +78,14 @@ function Modal({ onClose, addNote }: ModalProps) {
               </div>
             )}
             <div className="modal__button-container">
-              <button className="modal__button modal__button--cancel">
+              <button
+                onClick={onClose}
+                className="modal__button modal__button--cancel"
+              >
                 Cancel
               </button>
               <button className="modal__button" type="submit">
-                Save
+                Add note
               </button>
             </div>
           </form>
