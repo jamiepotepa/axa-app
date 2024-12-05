@@ -12,9 +12,10 @@ import { NoteData } from "./types";
 // Need error handling if a fetch fails. Some sort of message. !ok
 // Move fetches to hooks?
 // Add edit note functionality - If I do, make sure to change the submit button text to read update
-// update Readme to explain hos to run the app and give some explanation of the code
-// Change search-and-filter to just search in naming if I don't add the filter section
-// Adding a note clears the search text
+// update Readme to explain how to run the app and give some explanation of the code
+// Change search-and-filter naming to search if I don't implement the filter
+// Adding a note clears the search text ???? - this would require hooking up the search state and passing it down. Debounce doesn't work well with this
+// Clean up debounce if component gets unmounted?
 
 //? Check typescript for onClick events etc
 
