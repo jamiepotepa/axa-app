@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, ChangeEvent, useMemo } from "react";
 import { RxCross1 } from "react-icons/rx";
+import debounce from "debounce";
 
 import { NoteData } from "./types";
 import Note from "./components/Note";
@@ -13,6 +14,8 @@ import LoadingSpinner from "./components/LoadingSpinner";
 // Add search functionality - use Debounce
 // update Readme to explain hos to run the app and give some explanation of the code
 // Clicking return in the note should post ?
+// Put header section and filter into their own components?
+// Take out case for search
 
 //* Separate components and styles
 //* Cancel button in the modal needs to clear the form and close the modal
@@ -27,6 +30,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [notes, setNotes] = useState<NoteData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
   // Use this to set and pass the active note through to the modal for editing
   // const [activeNote, setActiveNote] = useState<NoteData | null>(null);
 
@@ -105,6 +109,28 @@ function App() {
     fetchNotes();
   }, []);
 
+  const filteredNotes = notes.filter((note) =>
+    note.title.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const handleSearchOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    debounce((text: string) => setSearchText(text), 300)(e.target.value);
+  };
+
+  // ?? useMemo and useCallback examples, a bit overkill for this app
+  // const filteredNotes2 = useMemo(() => {
+  //   return notes.filter((note) => note.title.toLowerCase().includes(searchText.toLowerCase()));
+  // }, [notes, searchText]);
+
+  // const handleSearchOnChange2 = useCallback(
+  //   (e: ChangeEvent<HTMLInputElement>) => {
+  //     debounce((text: string) => setSearchText(text), 500)(e.target.value);
+  //   },
+  //   []
+  // );
+
+  // ?? Better to do the useMemo approach below or the early return for no notes?
+  // ?? Currently I am just doing the logic in the main return
   // const noNotes = useMemo(() => {
   //   if (notes.length === 0) {
   //     return (
@@ -116,6 +142,16 @@ function App() {
   //     );
   //   }
   // }, [notes]);
+
+  // if (notes.length === 0) {
+  //   return (
+  //     <div>
+  //       <p>
+  //         Looks like you don't have any notes! Click add note in the top right
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
@@ -141,6 +177,7 @@ function App() {
             type="text"
             placeholder="Search notes..."
             className="search-and-filter__search"
+            onChange={handleSearchOnChange}
           />
 
           <div className="search-and-filter__filter">
@@ -162,7 +199,17 @@ function App() {
         ) : (
           <div className="notes-container">
             {loading && <LoadingSpinner />}
-            {notes.map(({ id, title, content }) => (
+            {/* {notes.map(({ id, title, content }) => (
+              // <Note key={note.id} title={note.title} content={note.content} />
+              <Note
+                key={id}
+                title={title}
+                content={content}
+                id={id}
+                deleteNote={deleteNote}
+              />
+            ))} */}
+            {filteredNotes.map(({ id, title, content }) => (
               // <Note key={note.id} title={note.title} content={note.content} />
               <Note
                 key={id}
@@ -172,6 +219,17 @@ function App() {
                 deleteNote={deleteNote}
               />
             ))}
+            {/* {notes
+              .filter((note) => note.title.includes(searchText))
+              .map((note) => (
+                <Note
+                  key={note.id}
+                  title={note.title}
+                  content={note.content}
+                  id={note.id}
+                  deleteNote={deleteNote}
+                />
+              ))} */}
           </div>
         )}
       </div>
