@@ -199,18 +199,7 @@ function App() {
         ) : (
           <div className="notes-container">
             {loading && <LoadingSpinner />}
-            {/* {notes.map(({ id, title, content }) => (
-              // <Note key={note.id} title={note.title} content={note.content} />
-              <Note
-                key={id}
-                title={title}
-                content={content}
-                id={id}
-                deleteNote={deleteNote}
-              />
-            ))} */}
             {filteredNotes.map(({ id, title, content }) => (
-              // <Note key={note.id} title={note.title} content={note.content} />
               <Note
                 key={id}
                 title={title}
@@ -219,17 +208,6 @@ function App() {
                 deleteNote={deleteNote}
               />
             ))}
-            {/* {notes
-              .filter((note) => note.title.includes(searchText))
-              .map((note) => (
-                <Note
-                  key={note.id}
-                  title={note.title}
-                  content={note.content}
-                  id={note.id}
-                  deleteNote={deleteNote}
-                />
-              ))} */}
           </div>
         )}
       </div>
