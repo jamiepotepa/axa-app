@@ -39,7 +39,7 @@ function Modal({ onClose, addNote }: ModalProps) {
     };
 
     addNote(data);
-    console.log(data);
+    console.log("modal data ", data);
 
     onClose();
   };

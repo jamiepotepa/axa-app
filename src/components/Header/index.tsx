@@ -15,7 +15,9 @@ function Header({ showModal }: HeaderProps) {
         <div className="header__actions">
           <button
             className="header__button button"
-            onClick={() => showModal(true)}
+            onClick={() => {
+              showModal(true);
+            }}
           >
             Add note
             <RxCross1 className="header__button-icon" />
