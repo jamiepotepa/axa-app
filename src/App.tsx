@@ -16,6 +16,7 @@ import { NoteData } from "./types";
 // Change search-and-filter naming to search if I don't implement the filter
 // Adding a note clears the search text ???? - this would require hooking up the search state and passing it down. Debounce doesn't work well with this
 // Clean up debounce if component gets unmounted?
+//? Maybe the filter could switch between searching the title of content of each note
 
 //? Check typescript for onClick events etc
 
@@ -186,6 +187,7 @@ function App() {
                 deleteNote={deleteNote}
               />
             ))}
+            {filteredNotes.length === 0 && <p>No notes found</p>}
           </div>
         )}
       </div>

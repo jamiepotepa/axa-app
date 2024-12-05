@@ -1,3 +1,24 @@
 {
-  "notes": []
+  "notes": [
+    {
+      "id": "4927e487-e817-4082-b06e-226e61f6ae71",
+      "title": "Note 1",
+      "content": "Note 1 comment"
+    },
+    {
+      "id": "50e55e13-79fc-42c2-bf68-6b1e8677a98a",
+      "title": "Note 2",
+      "content": "Note 2 comment"
+    },
+    {
+      "id": "83e803e8-4652-4515-8ae3-41e0f27adcbd",
+      "title": "Note 3",
+      "content": "Note 3 comment"
+    },
+    {
+      "id": "8a67cc66-2cf9-4298-a126-9c09fd772b75",
+      "title": "Go shopping",
+      "content": "do a food shop"
+    }
+  ]
 }
