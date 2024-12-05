@@ -1,0 +1,62 @@
+:root {
+  --main-font-family: "Arial", "Helvetica", sans-serif;
+  --main-text-color: #333333;
+  --test-color: pink;
+}
+
+html {
+  box-sizing: border-box;
+  font-family: var(--main-font-family);
+  line-height: 1.5;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: var(--main-text-color);
+}
+
+h1,
+h2,
+p {
+  // overflow-wrap: break-word; // Doesn't work with grid cells
+  word-break: break-all;
+  margin: 0;
+}
+
+// h1,
+// h2 {
+//   margin: 0;
+// }
+
+// p {
+//   margin-top: 0;
+// }
+
+button {
+  cursor: pointer;
+}
+
+.inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.content {
+  padding-top: 20px;
+}
+
+.notes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 20px;
+}

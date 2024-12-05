@@ -1,24 +1,28 @@
-import { useEffect, useState, useCallback, ChangeEvent, useMemo } from "react";
-import { RxCross1 } from "react-icons/rx";
+import { useEffect, useState, ChangeEvent } from "react";
 import debounce from "debounce";
 
-import { NoteData } from "./types";
+import Header from "./components/Header";
+import SearchAndFilter from "./components/SearchAndFilter";
 import Note from "./components/Note";
 import Modal from "./components/Modal";
 import LoadingSpinner from "./components/LoadingSpinner";
+import { NoteData } from "./types";
 
 //TODO
 // Need error handling if a fetch fails. Some sort of message. !ok
 // Move fetches to hooks?
 // Add edit note functionality - If I do, make sure to change the submit button text to read update
-// Add search functionality - use Debounce
 // update Readme to explain hos to run the app and give some explanation of the code
-// Clicking return in the note should post ?
-// Put header section and filter into their own components?
-// Take out case for search
+// Change search-and-filter to just search in naming if I don't add the filter section
+// Adding a note clears the search text
+
+//? Check typescript for onClick events etc
 
 //* Separate components and styles
 //* Cancel button in the modal needs to clear the form and close the modal
+//* Take out case for search
+//* Add search functionality - use Debounce
+//*  Put header section and filter into their own components?
 
 // interface NoteData {
 //   id: string;
@@ -138,6 +142,7 @@ function App() {
   //         <p>
   //           Looks like you don't have any notes! Click add note in the top right
   //         </p>
+  //          {loading && <LoadingSpinner />}
   //       </div>
   //     );
   //   }
@@ -149,44 +154,16 @@ function App() {
   //       <p>
   //         Looks like you don't have any notes! Click add note in the top right
   //       </p>
+  //       {loading && <LoadingSpinner />}
   //     </div>
   //   );
   // }
 
   return (
     <div>
-      <div className="header">
-        <div className="header__inner inner">
-          <div className="header__title">
-            <h1>Simple Notes</h1>
-          </div>
-          <div className="header__actions">
-            <button
-              className="header__button button"
-              onClick={() => setShowModal(true)}
-            >
-              Add note
-              <RxCross1 className="header__button-icon" />
-            </button>
-          </div>
-        </div>
-      </div>
+      <Header showModal={setShowModal} />
       <div className="content inner">
-        <div className="search-and-filter">
-          <input
-            type="text"
-            placeholder="Search notes..."
-            className="search-and-filter__search"
-            onChange={handleSearchOnChange}
-          />
-
-          <div className="search-and-filter__filter">
-            <select>
-              <option value="all">All</option>
-              <option value="important">Important</option>
-            </select>
-          </div>
-        </div>
+        <SearchAndFilter handleSearchOnChange={handleSearchOnChange} />
         {/* {noNotes} */}
         {notes.length === 0 ? (
           <div>
