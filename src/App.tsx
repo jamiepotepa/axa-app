@@ -9,10 +9,12 @@ import LoadingSpinner from "./components/LoadingSpinner";
 //TODO
 // Need error handling if a fetch fails. Some sort of message. !ok
 // Move fetches to hooks?
-// Add edit note functionality
+// Add edit note functionality - If I do, make sure to change the submit button text to read update
 // Add search functionality - use Debounce
 // Cancel button in the modal needs to clear the form and close the modal
 // update Readme to explain hos to run the app and give some explanation of the code
+// Clicking return in the note should post ?
+
 //* Separate components and styles
 
 // interface NoteData {
