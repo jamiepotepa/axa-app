@@ -12,9 +12,6 @@ type FormProps = {
 };
 
 function Form({ onClose, addNote, editNote, activeNote }: FormProps) {
-  // const [title, setTitle] = useState(activeNote?.title || "");
-  // const [content, setContent] = useState(activeNote?.content || "");
-
   const [error, setError] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -29,10 +26,6 @@ function Form({ onClose, addNote, editNote, activeNote }: FormProps) {
       setError(true);
       return;
     }
-    // if (!title || !content) {
-    //   setError(true);
-    //   return;
-    // }
 
     setError(false);
 
@@ -40,11 +33,6 @@ function Form({ onClose, addNote, editNote, activeNote }: FormProps) {
       title: sanitiseInput(titleRef.current?.value || ""),
       content: sanitiseInput(contentRef.current?.value || ""),
     };
-
-    // const data = {
-    //   title: sanitiseInput(title),
-    //   content: sanitiseInput(content),
-    // };
 
     if (activeNote) {
       editNote(activeNote.id, data);
@@ -70,8 +58,6 @@ function Form({ onClose, addNote, editNote, activeNote }: FormProps) {
           type="text"
           placeholder="Title..."
           className="add-note-form__input"
-          // value={title}
-          // onChange={(e) => setTitle(e.target.value)}
           ref={titleRef}
         />
         <textarea
@@ -79,8 +65,6 @@ function Form({ onClose, addNote, editNote, activeNote }: FormProps) {
           rows={4}
           placeholder="Note content..."
           className="add-note-form__text-area"
-          // value={content}
-          // onChange={(e) => setContent(e.target.value)}
           ref={contentRef}
         ></textarea>
       </div>
