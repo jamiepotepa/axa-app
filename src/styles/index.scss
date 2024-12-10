@@ -26,8 +26,7 @@ body {
 h1,
 h2,
 p {
-  // overflow-wrap: break-word; // Doesn't work with grid cells
-  word-break: break-all;
+  overflow-wrap: anywhere;
   margin: 0;
 }
 
