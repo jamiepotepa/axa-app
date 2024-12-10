@@ -18,7 +18,6 @@ function Form({ onClose, addNote, editNote, activeNote }: FormProps) {
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    console.log("handleSubmit");
     e.preventDefault();
 
     // Fallback if 'required' is removed from the input fields

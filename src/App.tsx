@@ -26,7 +26,6 @@ function App() {
   const searchRef = useRef<HTMLInputElement>(null);
 
   async function fetchNotes() {
-    console.log("fetching notes");
     setLoading(true);
     setError(null);
 
@@ -55,11 +54,10 @@ function App() {
       setNotes((prevNotes) => [...prevNotes, newNote]);
       // await fetchNotes();
     } catch (error) {
-      console.error(error);
-      console.log("Error adding note");
       setError(
         "We could not add your not. Please refresh the page and try again"
       );
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -76,10 +74,10 @@ function App() {
       setNotes(notes.filter((note) => note.id !== id));
       // await fetchNotes();
     } catch (error) {
-      console.error(error);
       setError(
         "We could not delete your not. Please refresh the page and try again"
       );
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -101,10 +99,10 @@ function App() {
       );
       // await fetchNotes();
     } catch (error) {
-      console.error(error);
       setError(
         "We could not edit your not. Please refresh the page and try again"
       );
+      console.error(error);
     } finally {
       setLoading(false);
     }
