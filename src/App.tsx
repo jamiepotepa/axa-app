@@ -110,10 +110,6 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
   const handleSearchOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     debounce((text: string) => setSearchText(text), 300)(e.target.value);
   };
@@ -133,6 +129,10 @@ function App() {
   };
 
   const modalTitle = activeNote ? "Edit a note" : "Add a note";
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
 
   return (
     <div>
