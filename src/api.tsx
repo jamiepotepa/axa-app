@@ -1,6 +1,7 @@
 import { NoteData } from "./types";
 
-const API_URL = "http://localhost:5000/notes";
+const port = 5000;
+const API_URL = `http://localhost:${port}/notes`;
 
 export async function fetchNotes() {
   const response = await fetch(API_URL);
