@@ -43,10 +43,6 @@ export async function deleteNote(id: string) {
   if (!response.ok) {
     throw new Error("Something went wrong when deleting a note");
   }
-
-  // const data: NoteData[] = await response.json();
-
-  // console.log(data);
 }
 
 export async function editNote(
@@ -66,9 +62,6 @@ export async function editNote(
   if (!response.ok) {
     throw new Error("Something went wrong when deleting a note");
   }
-  // const data: NoteData[] = await response.json();
-
-  // return data;
 }
 
 // export async function fetchNotes() {
