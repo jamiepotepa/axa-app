@@ -15,13 +15,6 @@ function SearchAndFilter({ handleSearchOnChange }: SearchAndFilterProps) {
         className="search__input"
         onChange={handleSearchOnChange}
       />
-
-      {/* <div className="search-and-filter__filter">
-        <select>
-          <option value="all">All</option>
-          <option value="important">Important</option>
-        </select>
-      </div> */}
     </div>
   );
 }
