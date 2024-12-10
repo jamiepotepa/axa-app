@@ -19,11 +19,6 @@ function NotesContainer({
     note.title.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  // ?? useMemo example
-  // const filteredNotes2 = useMemo(() => {
-  //   return notes.filter((note) => note.title.toLowerCase().includes(searchText.toLowerCase()));
-  // }, [notes, searchText]);
-
   if (notes.length === 0) {
     return (
       <div>
