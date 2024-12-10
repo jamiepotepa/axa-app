@@ -1,6 +1,6 @@
 @import "../../styles/mixins/media-query";
 
-.search-and-filter {
+.search {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -20,7 +20,7 @@
   //   margin-right: 20px;
   // }
 
-  &__search {
+  &__input {
     width: 100%;
     border: none;
     font-size: 1.2rem;
@@ -30,12 +30,12 @@
     // margin-right: 20px;
   }
 
-  &__filter {
-    background-color: #fff;
-    padding: 10px;
-    // border: 1px solid #ccc;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-  }
+  // &__filter {
+  //   background-color: #fff;
+  //   padding: 10px;
+  //   // border: 1px solid #ccc;
+  //   border-radius: 5px;
+  //   display: flex;
+  //   align-items: center;
+  // }
 }

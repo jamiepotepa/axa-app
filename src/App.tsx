@@ -1,91 +1,65 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import debounce from "debounce";
 
-import Header from "./components/Header";
-import SearchAndFilter from "./components/SearchAndFilter";
-import Note from "./components/Note";
-import Modal from "./components/Modal";
-import LoadingSpinner from "./components/LoadingSpinner";
 import { NoteData } from "./types";
+import Header from "./components/Header";
+import Search from "./components/Search";
+import LoadingSpinner from "./components/LoadingSpinner";
+import Modal from "./components/Modal";
+import Form from "./components/Form";
+import NotesContainer from "./components/NotesContainer";
 
-//TODO
-// Need error handling if a fetch fails. Some sort of message. !ok
-// Move fetches to hooks?
-// Add edit note functionality - If I do, make sure to change the submit button text to read update
-// update Readme to explain how to run the app and give some explanation of the code
-// Change search-and-filter naming to search if I don't implement the filter
-// Adding a note clears the search text ???? - this would require hooking up the search state and passing it down. Debounce doesn't work well with this
-// Clean up debounce if component gets unmounted?
-//? Maybe the filter could switch between searching the title of content of each note
-
-//? Check typescript for onClick events etc
-
-//* Separate components and styles
-//* Cancel button in the modal needs to clear the form and close the modal
-//* Take out case for search
-//* Add search functionality - use Debounce
-//*  Put header section and filter into their own components?
-
-// interface NoteData {
-//   id: string;
-//   title: string;
-//   content: string;
-// }
+import {
+  fetchNotes as fetchAllNotes,
+  addNote as addNewNote,
+  deleteNote as deleteNoteById,
+  editNote as editNoteById,
+} from "./api";
 
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [notes, setNotes] = useState<NoteData[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  // Use this to set and pass the active note through to the modal for editing
-  // const [activeNote, setActiveNote] = useState<NoteData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [activeNote, setActiveNote] = useState<NoteData | null>(null);
+  // const searchRef = useRef<HTMLInputElement>(null);
 
   async function fetchNotes() {
-    console.log("fetchNotes");
+    console.log("fetching notes");
     setLoading(true);
-    try {
-      const response = await fetch("http://localhost:5000/notes");
+    setError(null);
 
-      if (!response.ok) {
-        throw new Error("Something went wrong when fetching data");
-      }
-      const data: NoteData[] = await response.json();
+    try {
+      const data = await fetchAllNotes();
 
       setNotes(data);
     } catch (error) {
+      setError(
+        "We were unable to fetch your notes. Please refresh the page and try again"
+      );
       console.error(error);
     } finally {
-      console.log("This always runs");
       setLoading(false);
     }
   }
 
   async function addNote(data: { title: string; content: string }) {
+    setLoading(true);
+    setError(null);
+
     try {
-      setLoading(true);
-
-      const id = crypto.randomUUID();
-      const response = await fetch("http://localhost:5000/notes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-          title: data.title,
-          content: data.content,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Something went wrong when adding a note");
-      }
-
-      setNotes([...notes, { id, ...data }]);
-
-      // fetchNotes();
+      const newNote = await addNewNote(data);
+      // NOTE: As an optimistic approach I am adding notes here, for a production site it would be better to fetch
+      // the new notes from the server to keep the data in sync
+      setNotes((prevNotes) => [...prevNotes, newNote]);
+      // await fetchNotes();
     } catch (error) {
       console.error(error);
+      console.log("Error adding note");
+      setError(
+        "We could not add your not. Please refresh the page and try again"
+      );
     } finally {
       setLoading(false);
     }
@@ -93,19 +67,44 @@ function App() {
 
   async function deleteNote(id: string) {
     setLoading(true);
+    setError(null);
+
     try {
-      const response = await fetch(`http://localhost:5000/notes/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Something went wrong when deleting a note");
-      }
-
-      // fetchNotes();
+      await deleteNoteById(id);
+      // NOTE: As an optimistic approach I am filtering the notes here, for a production site it would be better to fetch
+      // the new notes from the server to keep the data in sync
       setNotes(notes.filter((note) => note.id !== id));
+      // await fetchNotes();
     } catch (error) {
       console.error(error);
+      setError(
+        "We could not delete your not. Please refresh the page and try again"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function editNote(
+    id: string,
+    data: { title: string; content: string }
+  ) {
+    setLoading(true);
+    setError(null);
+
+    try {
+      await editNoteById(id, data);
+      // NOTE: As an optimistic approach I am updating the notes here, for a production site it would be better to fetch
+      // the new notes from the server to keep the data in sync
+      setNotes((prevNotes) =>
+        prevNotes.map((note) => (note.id === id ? { ...note, ...data } : note))
+      );
+      // await fetchNotes();
+    } catch (error) {
+      console.error(error);
+      setError(
+        "We could not edit your not. Please refresh the page and try again"
+      );
     } finally {
       setLoading(false);
     }
@@ -115,84 +114,54 @@ function App() {
     fetchNotes();
   }, []);
 
-  const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(searchText.toLowerCase())
-  );
-
   const handleSearchOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     debounce((text: string) => setSearchText(text), 300)(e.target.value);
   };
 
-  // ?? useMemo and useCallback examples, a bit overkill for this app
-  // const filteredNotes2 = useMemo(() => {
-  //   return notes.filter((note) => note.title.toLowerCase().includes(searchText.toLowerCase()));
-  // }, [notes, searchText]);
+  const handleEditNote = (id: string) => {
+    const noteToEdit = notes.find((note) => note.id === id);
+    if (!noteToEdit) return;
+    setShowModal(true);
+    setActiveNote(noteToEdit);
+  };
 
-  // const handleSearchOnChange2 = useCallback(
-  //   (e: ChangeEvent<HTMLInputElement>) => {
-  //     debounce((text: string) => setSearchText(text), 500)(e.target.value);
-  //   },
-  //   []
-  // );
+  const handleAddNote = () => {
+    // searchRef.current!.value = "";
+    // setSearchText("");
+    setActiveNote(null);
+    setShowModal(true);
+  };
 
-  // ?? Better to do the useMemo approach below or the early return for no notes?
-  // ?? Currently I am just doing the logic in the main return
-  // const noNotes = useMemo(() => {
-  //   if (notes.length === 0) {
-  //     return (
-  //       <div>
-  //         <p>
-  //           Looks like you don't have any notes! Click add note in the top right
-  //         </p>
-  //          {loading && <LoadingSpinner />}
-  //       </div>
-  //     );
-  //   }
-  // }, [notes]);
-
-  // if (notes.length === 0) {
-  //   return (
-  //     <div>
-  //       <p>
-  //         Looks like you don't have any notes! Click add note in the top right
-  //       </p>
-  //       {loading && <LoadingSpinner />}
-  //     </div>
-  //   );
-  // }
+  const modalTitle = activeNote ? "Edit a note" : "Add a note";
 
   return (
     <div>
-      <Header showModal={setShowModal} />
+      {loading && <LoadingSpinner />}
+      <Header addNote={handleAddNote} />
       <div className="content inner">
-        <SearchAndFilter handleSearchOnChange={handleSearchOnChange} />
-        {/* {noNotes} */}
-        {notes.length === 0 ? (
+        <Search handleSearchOnChange={handleSearchOnChange} />
+        {error ? (
           <div>
-            <p>
-              Looks like you don't have any notes! Add a note by clicking the
-              add note button up there in the top right
-            </p>
-            {loading && <LoadingSpinner />}
+            <p>{error}</p>
           </div>
         ) : (
-          <div className="notes-container">
-            {loading && <LoadingSpinner />}
-            {filteredNotes.map(({ id, title, content }) => (
-              <Note
-                key={id}
-                title={title}
-                content={content}
-                id={id}
-                deleteNote={deleteNote}
-              />
-            ))}
-            {filteredNotes.length === 0 && <p>No notes found</p>}
-          </div>
+          <NotesContainer
+            notes={notes}
+            searchText={searchText}
+            deleteNote={deleteNote}
+            handleEditNote={handleEditNote}
+          />
         )}
       </div>
       {showModal && (
-        <Modal onClose={() => setShowModal(false)} addNote={addNote} />
+        <Modal title={modalTitle} onClose={() => setShowModal(false)}>
+          <Form
+            onClose={() => setShowModal(false)}
+            addNote={addNote}
+            editNote={editNote}
+            activeNote={activeNote}
+          />
+        </Modal>
       )}
     </div>
   );

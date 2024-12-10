@@ -2,10 +2,10 @@ import { RxCross1 } from "react-icons/rx";
 import "./Header.scss";
 
 type HeaderProps = {
-  showModal: (value: boolean) => void;
+  addNote: () => void;
 };
 
-function Header({ showModal }: HeaderProps) {
+function Header({ addNote }: HeaderProps) {
   return (
     <div className="header">
       <div className="header__inner inner">
@@ -14,10 +14,9 @@ function Header({ showModal }: HeaderProps) {
         </div>
         <div className="header__actions">
           <button
+            type="button"
             className="header__button button"
-            onClick={() => {
-              showModal(true);
-            }}
+            onClick={addNote}
           >
             Add note
             <RxCross1 className="header__button-icon" />

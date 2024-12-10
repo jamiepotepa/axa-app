@@ -1,24 +1,30 @@
 import "./note.scss";
+import { NoteData } from "../../types";
 
-type NoteProps = {
+type NoteProps = NoteData & {
   deleteNote: (id: string) => void;
-  id: string;
-  title: string;
-  content: string;
+  handleEditNote: (id: string) => void;
 };
 
-function Note({ id, title, content, deleteNote }: NoteProps) {
+function Note({ id, title, content, deleteNote, handleEditNote }: NoteProps) {
   return (
     <div className="note">
       <div className="note__header">
         <h2>{title}</h2>
       </div>
-      <div className="node__content">
+      <div className="note__content">
         <p>{content}</p>
       </div>
       <div className="note__actions">
-        <button className="note__button note__button--edit">Edit</button>
         <button
+          type="button"
+          className="note__button note__button--edit"
+          onClick={() => handleEditNote(id)}
+        >
+          Edit
+        </button>
+        <button
+          type="button"
           className="note__button note__button--delete"
           onClick={() => deleteNote(id)}
         >

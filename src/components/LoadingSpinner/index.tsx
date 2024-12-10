@@ -1,4 +1,4 @@
-import "./loadingSpinner.scss";
+import "./loading-spinner.scss";
 import BounceLoader from "react-spinners/BounceLoader";
 
 function LoadingSpinner() {
