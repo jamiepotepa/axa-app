@@ -1,5 +1,6 @@
 import Note from "../Note";
 import { NoteData } from "../../types";
+import "./notes-container.scss";
 
 type NotesContainerProps = {
   notes: NoteData[];
