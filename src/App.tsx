@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent } from "react";
+import { useEffect, useState, ChangeEvent, useRef } from "react";
 import debounce from "debounce";
 
 import { NoteData } from "./types";
@@ -23,7 +23,7 @@ function App() {
   const [searchText, setSearchText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [activeNote, setActiveNote] = useState<NoteData | null>(null);
-  // const searchRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   async function fetchNotes() {
     console.log("fetching notes");
@@ -126,8 +126,8 @@ function App() {
   };
 
   const handleAddNote = () => {
-    // searchRef.current!.value = "";
-    // setSearchText("");
+    searchRef.current!.value = "";
+    setSearchText("");
     setActiveNote(null);
     setShowModal(true);
   };
@@ -139,7 +139,7 @@ function App() {
       {loading && <LoadingSpinner />}
       <Header addNote={handleAddNote} />
       <div className="content inner">
-        <Search handleSearchOnChange={handleSearchOnChange} />
+        <Search handleSearchOnChange={handleSearchOnChange} ref={searchRef} />
         {error ? (
           <div>
             <p>{error}</p>
