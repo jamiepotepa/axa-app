@@ -1,12 +1,15 @@
 import "./note.scss";
 import { NoteData } from "../../types";
+import { useDeleteNote } from "../../hooks/useDeleteNote";
 
 type NoteProps = NoteData & {
-  deleteNote: (id: string) => void;
+  // deleteNote: (id: string) => void;
   handleEditNote: (id: string) => void;
 };
 
-function Note({ id, title, content, deleteNote, handleEditNote }: NoteProps) {
+function Note({ id, title, content, handleEditNote }: NoteProps) {
+  const { deleteNote } = useDeleteNote();
+
   return (
     <div className="note">
       <div className="note__header">

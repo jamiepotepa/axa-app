@@ -1,18 +1,23 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import "./form.scss";
 import { NoteData } from "../../types";
+import { useAddNote } from "../../hooks/useAddNote";
+import { useEditNote } from "../../hooks/useEditNote";
 
 import { sanitiseInput } from "../../utils/sanitise";
 
 type FormProps = {
   onClose: () => void;
-  addNote: (data: { title: string; content: string }) => void;
-  editNote: (id: string, data: { title: string; content: string }) => void;
+  // addNote: (data: { title: string; content: string }) => void;
+  // editNote: (id: string, data: { title: string; content: string }) => void;
   activeNote: NoteData | null;
 };
 
-function Form({ onClose, addNote, editNote, activeNote }: FormProps) {
+function Form({ onClose, activeNote }: FormProps) {
   const [error, setError] = useState(false);
+
+  const { addNote } = useAddNote();
+  const { editNote } = useEditNote();
 
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);

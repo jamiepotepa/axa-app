@@ -5,14 +5,14 @@ import "./notes-container.scss";
 type NotesContainerProps = {
   notes: NoteData[];
   searchText: string;
-  deleteNote: (id: string) => void;
+  // deleteNote: (id: string) => void;
   handleEditNote: (id: string) => void;
 };
 
 function NotesContainer({
   notes,
   searchText,
-  deleteNote,
+  // deleteNote,
   handleEditNote,
 }: NotesContainerProps) {
   const filteredNotes = notes.filter((note) =>
@@ -38,7 +38,7 @@ function NotesContainer({
           title={title}
           content={content}
           id={id}
-          deleteNote={deleteNote}
+          // deleteNote={deleteNote}
           handleEditNote={handleEditNote}
         />
       ))}
